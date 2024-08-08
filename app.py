@@ -46,6 +46,13 @@ class Bot_Likedin:
         fator_zoom = 0.5
         self.site.execute_script(f"document.body.style.zoom = '{fator_zoom}';")
 
+    def scroll_down(self, number_to_scroll, breathing_time):
+        for _ in range(number_to_scroll):
+            # Scroll the page down to the bottom of the visible content
+            self.site.execute_script("window.scrollBy(0, document.body.scrollHeight);")
+            # Wait seconds before scrolling again
+            time.sleep(breathing_time)
+
     def number_employees(self):
         print('Iniciando ação')
         try:
@@ -98,14 +105,84 @@ class Bot_Likedin:
 
         # acess and envite message 
 
+    def view_all_results(self):
+        while True:
+            try:
+                button = self.site.find_element(By.XPATH,"//a[contains(text(),'Ver todos os resultados de publicações')]") # if you are in inglish, change the words of the "contains"
+                if button:
+                    button.click()
+                    time.sleep(5)
+                    break
+                else:
+                    self.scroll_down(1)
+            except:
+                time.sleep(1)
+                print('More Results not found still')
+
+    def send_message(self):  # To change the message, edit within this function
+        # Read URLs from the file
+        with open('linkedIn_profiles.TXT', 'r') as file:
+            urls = file.readlines()
         
+        # Iterate over each URL
+        for url in urls:
+            url = url.strip()  # Remove leading/trailing whitespace
+            
+            # Open the LinkedIn profile
+            self.site.get(url)
+            time.sleep(5)  # Wait for the page to load
+
+            try:
+                # Name of the people
+                name_element = self.site.find_element(By.XPATH, "//h1[@class='text-heading-xlarge inline t-24 v-align-middle break-words']")
+                full_name = name_element.text
+                first_name = full_name.split()[0]
+
+                # Find and click the 'Connect' button
+                connect = self.site.find_element(By.XPATH, '//button[@class="artdeco-button artdeco-button--2 artdeco-button--primary ember-view pvs-profile-actions__action"]')  
+                time.sleep(2)
+                if connect:
+                    connect.click()
+                    time.sleep(2)  # Wait for the connection modal to appear
+
+                    # Check if 'Add a note' option is available
+
+                    with_note = self.site.find_element(By.XPATH, '//button[@aria-label="Adicionar nota"]')
+                    with_note.click()
+                    time.sleep(1.5)
+
+                    # Create and send the message
+                    your_name = 'Raphael'
+                    knowledge = 'Ciência de dados'
+                    # Don´t can pass of 200 words
+                    message = f"""
+    Olá {first_name}!
+    Me chamo {your_name} e estou estudando sobre {knowledge}. Vi seu perfil e me interessei pelos posts!
+    Vamos manter contato para compartilharmos conhecimento!
+    """
+                    message_field = self.site.find_element(By.XPATH, '//textarea[@id="custom-message"]')
+                    message_field.send_keys(message)
+                    time.sleep(15)
+                    send = self.site.find_element(By.XPATH, '//button[@aria-label="Enviar convite"]')
+                    send.click()
+                    time.sleep(5)
+                else:
+                    print(f"Connect button not found for {url}")
+
+            except Exception as e:
+                print(f"Error sending message to {url}: {e}")
+
+
 
     # General activation function
     def main(self): # If you don´t want someone functions, just use '#' before the function
         self.login_acess()
         self.mininize()
-        self.url_hashtag('dashboard')
-        self.capture_link_peoples()
+        self.send_message()
+        # self.url_hashtag('dashboard')
+        # self.view_all_results()
+        # self.scroll_down(30, 5) 
+        # self.capture_link_peoples()
         # self.number_employees()
 
 # use
