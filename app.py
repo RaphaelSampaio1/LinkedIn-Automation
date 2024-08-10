@@ -5,10 +5,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
 from selenium.common.exceptions import NoSuchElementException, ElementClickInterceptedException
 import time
-import tkinter as tk
-import ttkbootstrap as ttk
-from ttkbootstrap.constants import *
-from ttkbootstrap.style import Style
 
 
 class Bot_Likedin:
