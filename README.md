@@ -36,7 +36,7 @@ This function navigates to the "People" tab of the company's LinkedIn page and a
 #### `url_hashtag(self, hashtag)`
 Builds and navigates to a LinkedIn search URL based on a provided hashtag. This is useful for conducting hashtag searches directly on LinkedIn.
 
-### connection_peoples(self, subject)
+### `connection_peoples(self, subject)`
 This function automates the process of sending connection requests to LinkedIn users based on a specific subject. It accesses the LinkedIn search results page for the given subject and iterates through the list of users, sending connection requests.
 
 subject: The keyword or topic to search for on LinkedIn. The bot will send connection requests to users who appear in the search results for this keyword.
