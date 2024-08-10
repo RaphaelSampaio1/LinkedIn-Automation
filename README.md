@@ -6,7 +6,7 @@ This project is an automation developed for LinkedIn, designed to facilitate var
 - **Capturing the number of employees** of a company.
 - **Collecting links of multiple user profiles**.
 - **Searching posts by specific hashtags**.
-
+- **Make connections with peoples**
 These functionalities help you connect with more people, fostering new friendships, knowledge exchange, and even potential job opportunities.
 
 ---
@@ -35,6 +35,12 @@ This function navigates to the "People" tab of the company's LinkedIn page and a
 
 #### `url_hashtag(self, hashtag)`
 Builds and navigates to a LinkedIn search URL based on a provided hashtag. This is useful for conducting hashtag searches directly on LinkedIn.
+
+### connection_peoples(self, subject)
+This function automates the process of sending connection requests to LinkedIn users based on a specific subject. It accesses the LinkedIn search results page for the given subject and iterates through the list of users, sending connection requests.
+
+subject: The keyword or topic to search for on LinkedIn. The bot will send connection requests to users who appear in the search results for this keyword.
+The function will attempt to connect with a maximum of 50 users. For each user, it clicks the "Connect" button, then sends the request without adding a note. If the "Connect" button is not found, the bot will scroll down the page to load more users and continue the process. If the maximum number of connections is reached or no more connections are available, the process ends.
 
 #### `capture_link_peoples(self)`
 Collects all profile links of users displayed on the current LinkedIn page and stores them in a text file named `linkedIn_profiles.TXT`. This function should be run before attempting to send messages, as it gathers the list of profile links to be used later.
