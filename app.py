@@ -3,7 +3,13 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
+from selenium.common.exceptions import NoSuchElementException, ElementClickInterceptedException
 import time
+import tkinter as tk
+import ttkbootstrap as ttk
+from ttkbootstrap.constants import *
+from ttkbootstrap.style import Style
+
 
 class Bot_Likedin:
     def __init__(self, email, password):
@@ -102,7 +108,54 @@ class Bot_Likedin:
     def url_hashtag(self,hashtag):
         url = f"https://www.linkedin.com/search/results/all/?keywords=%23{hashtag}&origin=GLOBAL_SEARCH_HEADER"
         self.site.get(url)
-        self.custom_print('Entering in the URL...')
+        self.custom_print('Entering in the hashtag URL...')
+
+    
+    def connection_peoples(self,subject):
+        # acess the url
+        url = f'https://www.linkedin.com/search/results/people/?keywords={subject}&origin=SWITCH_SEARCH_VERTICAL&searchId=23d3caca-af27-400c-a975-130437f3b353&sid=7z8'
+        self.site.get(url)
+        self.custom_print('Entering in the subject URL...')
+
+        n_max = 50
+        n = 0
+        while n < n_max:  # Do connection
+            try:
+                time.sleep(7)
+                connection = self.site.find_element(By.XPATH, "//button/span[text()='Conectar']")
+                if connection:
+                    connection.click()
+                    time.sleep(1.7)
+
+                    # Send without note
+                    try:
+                        without_note = self.site.find_element(By.XPATH, '//button[@aria-label="Enviar sem nota"]')
+                        if without_note:
+                            without_note.click()
+                            n += 1
+                            self.custom_print(f'Done {n} connections')
+                    except NoSuchElementException:
+                        print('Send without note button not found')
+                        continue  # Proceed with the next iteration
+
+            except (NoSuchElementException, ElementClickInterceptedException) as e:
+                print(f'Connection button not found or clickable: {str(e)}')
+                self.scroll_down(3, 0.5)
+
+                # Navigate to next page
+                try:
+                    next_page = self.site.find_element(By.XPATH, '//button[@aria-label="Avançar"]')
+                    if next_page:
+                        next_page.click()
+                        time.sleep(2)
+                except NoSuchElementException:
+                    print('Next page button not found or no more pages')
+                    break
+
+                time.sleep(3)
+
+        print('Reached maximum connections or no more connections available')
+
 
     def capture_link_peoples(self):
         time.sleep(6)
@@ -188,16 +241,16 @@ class Bot_Likedin:
             except Exception as e:
                 print(f"Error sending message to {url}: {e}")
 
-
     # General activation function
     def main(self): # If you don´t want someone functions, just use '#' before the function
         self.login_acess()
         self.mininize()
-        self.url_hashtag('dashboard')
-        self.view_all_results()
-        self.scroll_down(30, 5) 
-        self.capture_link_peoples()
-        self.send_message()
+        # self.url_hashtag('dashboard')
+        self.connection_peoples('python')
+        # self.view_all_results()
+        # self.scroll_down(30, 5) 
+        # self.capture_link_peoples()
+        # self.send_message()
         # self.number_employees()
 
 # use
