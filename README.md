@@ -10,7 +10,8 @@ This project is an automation developed for LinkedIn, designed to facilitate var
 These functionalities help you connect with more people, fostering new friendships, knowledge exchange, and even potential job opportunities.
 
 ---
-
+You can to look it link too : https://raphaelsampaio1.github.io/Website-LinkdIn-Automation/
+---
 ## Code Documentation
 
 ### Class `Bot_Likedin`
